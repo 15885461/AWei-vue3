@@ -1,10 +1,13 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
+import Breadcrumb from './Breadcrumb.vue'
 const userStore = useUserStore()
 </script>
 <template>
   <div class="navbar">
-    <div>My Project</div>
+    <div>
+      <Breadcrumb />
+    </div>
     <div class="user-info">
       {{ userStore.name }}
     </div>
