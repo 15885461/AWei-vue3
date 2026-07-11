@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login as loginApi, getInfo as getInfoApi } from '@/api/user'
 export const useUserStore = defineStore('user', () => {
   const token = ref(getToken() || '')
   const name = ref('')
@@ -8,17 +9,20 @@ export const useUserStore = defineStore('user', () => {
   const roles = ref<string[]>([])
   const permissions = ref<string[]>([])
 
-  function login() {
-    const mockToken = 'mock-token'
-    token.value = mockToken
-    setToken(mockToken)
+  async function login() {
+    const res = await loginApi()
+    const loginToken = res.data.token
+    token.value = loginToken
+    setToken(loginToken)
   }
 
-  function getInfo() {
-    name.value = 'admin'
-    avatar.value = ''
-    roles.value = ['admin']
-    permissions.value = ['*:*:*']
+  async function getInfo() {
+    const res = await getInfoApi()
+    const userInfo = res.data
+    name.value = userInfo.name
+    avatar.value = userInfo.avatar
+    roles.value = userInfo.roles
+    permissions.value = userInfo.permissions
   }
 
   function logout() {

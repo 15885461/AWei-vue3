@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@/layout/index.vue'
 import { useUserStore } from '@/stores/user'
-const routes = [
+export const constantRoutes = [
   {
     path: '/login',
+    name: 'Login',
     component: () => import('@/views/login/index.vue'),
+    meta: {
+      title: '登录',
+    },
   },
   {
     path: '/',
@@ -13,13 +17,21 @@ const routes = [
     children: [
       {
         path: 'dashboard',
+        name: 'Dashboard',
         component: () => import('@/views/dashboard/index.vue'),
+        meta: {
+          title: '仪表盘',
+        },
       },
     ],
   },
   {
     path: '/404',
+    name: 'NotFound',
     component: () => import('@/views/error/404.vue'),
+    meta: {
+      title: '404',
+    },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -28,12 +40,12 @@ const routes = [
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: constantRoutes,
 })
 
 const whiteList = ['/login', '/404']
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore()
   const hasToken = !!userStore.token
   const hasUserInfo = !!userStore.name
@@ -43,7 +55,7 @@ router.beforeEach((to) => {
       return '/dashboard'
     }
     if (!hasUserInfo) {
-      userStore.getInfo()
+      await userStore.getInfo()
     }
     return true
   }

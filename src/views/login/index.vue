@@ -9,8 +9,8 @@ const userStore = useUserStore()
 const username = ref('')
 const password = ref('')
 
-function handleLogin() {
-  userStore.login()
+async function handleLogin() {
+  await userStore.login()
   router.push('/dashboard')
 }
 </script>
