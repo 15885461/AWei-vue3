@@ -2,12 +2,14 @@
 import Navbar from './components/Navbar.vue'
 import Sidebar from './components/Sidebar.vue'
 import AppMain from './components/AppMain.vue'
+import TagsView from './components/TagsView.vue'
 </script>
 <template>
   <div class="layout">
     <Sidebar />
     <div class="layout-main">
       <Navbar />
+      <TagsView />
       <AppMain />
     </div>
   </div>
