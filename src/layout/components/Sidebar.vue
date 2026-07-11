@@ -1,9 +1,16 @@
 <script setup>
 import { computed } from 'vue';
-import { constantRoutes } from '@/router';
+import { usePermissionStore } from '@/stores/permission';
+const permissionStore = usePermissionStore();
 const menuRoutes = computed(() => {
-  const layoutRoutes = constantRoutes.find(route => route.path === '/')
-  return layoutRoutes?.children || []
+  const layoutRoutes = permissionStore.routes.find(route => route.path === '/')
+  const constantMenuRoutes = layoutRoutes?.children || []
+
+  const dynamicMenuRoutes = permissionStore.routes.filter((route) => {
+    return route.meta?.title && route.path !== '/' && route.path !== '/404' && route.path !== '/login'
+  })
+
+  return [...constantMenuRoutes, ...dynamicMenuRoutes]
 })
 </script>
 <template>

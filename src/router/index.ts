@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@/layout/index.vue'
 import { useUserStore } from '@/stores/user'
+import { usePermissionStore } from '@/stores/permission'
 export const constantRoutes = [
   {
     path: '/login',
@@ -13,6 +14,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
+    name: 'Layout',
     redirect: '/dashboard',
     children: [
       {
@@ -33,9 +35,22 @@ export const constantRoutes = [
       title: '404',
     },
   },
+]
+
+export const notFoundRoute = {
+  path: '/:pathMatch(.*)*',
+  redirect: '/404',
+}
+
+export const asyncRoutes = [
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/404',
+    path: 'system/user',
+    name: 'SystemUser',
+    component: () => import('@/views/dashboard/index.vue'),
+    meta: {
+      title: '用户管理',
+      roles: ['admin'],
+    },
   },
 ]
 const router = createRouter({
@@ -47,6 +62,7 @@ const whiteList = ['/login', '/404']
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore()
+  const permissionStore = usePermissionStore()
   const hasToken = !!userStore.token
   const hasUserInfo = !!userStore.name
 
@@ -56,6 +72,12 @@ router.beforeEach(async (to) => {
     }
     if (!hasUserInfo) {
       await userStore.getInfo()
+      const accessRoutes = permissionStore.generateRoutes(userStore.roles)
+      accessRoutes.forEach((route) => {
+        router.addRoute('Layout', route)
+      })
+      router.addRoute(notFoundRoute)
+      return to.fullPath
     }
     return true
   }
