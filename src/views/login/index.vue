@@ -1,10 +1,27 @@
 <script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+const router = useRouter()
+const userStore = useUserStore()
+
+const username = ref('')
+const password = ref('')
+
+function handleLogin() {
+  userStore.login()
+  router.push('/dashboard')
+}
 </script>
 <template>
   <div class="login-page">
     <div class="login-box">
       <h1>登录</h1>
       <p>请登录以继续</p>
+      <input v-model="username" placeholder="请输入用户名">
+      <input v-model="password" type="password" placeholder="请输入密码">
+      <button v-on:click="handleLogin">登录</button>
     </div>
   </div>
 </template>
