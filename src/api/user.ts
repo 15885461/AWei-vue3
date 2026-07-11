@@ -13,23 +13,31 @@ interface UserInfo {
 
 export function login() {
   return request<LoginData>({
-    code: 200,
-    msg: '登录成功',
-    data: {
-      token: 'mock-token',
+    url: '/login',
+    method: 'POST',
+    mockResponse: {
+      code: 200,
+      msg: '登录成功',
+      data: {
+        token: 'mock-token',
+      },
     },
   })
 }
 
 export function getInfo() {
   return request<UserInfo>({
-    code: 200,
-    msg: '获取用户信息成功',
-    data: {
-      name: 'mock-name',
-      avatar: '',
-      roles: ['admin'],
-      permissions: ['*:*:*'],
+    url: '/user/info',
+    method: 'GET',
+    mockResponse: {
+      code: 200,
+      msg: '获取用户信息成功',
+      data: {
+        name: 'mock-name',
+        avatar: '',
+        roles: ['admin'],
+        permissions: ['*:*:*'],
+      },
     },
   })
 }
