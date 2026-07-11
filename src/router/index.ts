@@ -36,14 +36,21 @@ const whiteList = ['/login', '/404']
 router.beforeEach((to) => {
   const userStore = useUserStore()
   const hasToken = !!userStore.token
+  const hasUserInfo = !!userStore.name
 
-  if (hasToken && to.path === '/login') {
-    return '/dashboard'
+  if (hasToken) {
+    if (to.path === '/login') {
+      return '/dashboard'
+    }
+    if (!hasUserInfo) {
+      userStore.getInfo()
+    }
+    return true
   }
-  if (!hasToken && !whiteList.includes(to.path)) {
-    return '/login'
+  if (whiteList.includes(to.path)) {
+    return true
   }
-  return true
+  return '/login'
 })
 
 export default router
