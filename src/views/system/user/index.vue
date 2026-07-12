@@ -9,6 +9,11 @@ const userList = [
 <template>
   <div>
     <h2>用户管理</h2>
+    <div class="toolbar">
+      <button v-has-permi="'system:user:add'">新增</button>
+      <button v-has-permi="'system:user:edit'">编辑</button>
+      <button v-has-permi="'system:user:remove'">删除</button>
+    </div>
     <table class="user-table">
       <thead>
         <tr>
