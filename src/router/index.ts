@@ -46,7 +46,7 @@ export const asyncRoutes = [
   {
     path: 'system/user',
     name: 'SystemUser',
-    component: () => import('@/views/dashboard/index.vue'),
+    component: () => import('@/views/system/user/index.vue'),
     meta: {
       title: '用户管理',
       roles: ['admin'],
